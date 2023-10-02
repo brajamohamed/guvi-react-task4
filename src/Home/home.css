@@ -1,0 +1,15 @@
+* {
+  box-sizing: border-box;
+}
+.heading {
+  color: rgb(0, 160, 133);
+}
+.todo_input {
+  border: 2px solid rgb(0, 160, 133);
+  border-radius: 5px;
+}
+.todo_btn {
+  background-color: rgb(0, 160, 133);
+  border-radius: 5px;
+  border-color: transparent;
+}
