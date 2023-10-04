@@ -1,5 +1,6 @@
 .card {
   background-color: rgb(194, 241, 194);
+  min-width: 300px;
 }
 #status {
   background-color: rgb(241, 154, 154);
@@ -13,4 +14,10 @@
   background-color: red;
   border: transparent;
   border-radius: 5px;
+}
+#edit:active {
+  transform: scale(0.95);
+}
+#delete:active {
+  transform: scale(0.95);
 }

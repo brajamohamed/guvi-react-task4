@@ -1,12 +1,13 @@
 import "./home.css";
 import Card from "../Card/card";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 const Home = (props) => {
   let [todoName, setTodoName] = useState("");
   let [todoDesc, setTodoDesc] = useState("");
   let [todos, setTodos] = useState([]);
-  let [status, setStatus] = useState("");
-  let [key, setKey] = useState(0);
+  let [key, setKey] = useState(1);
+  let [edit, setEdit] = useState(false);
+  let [toEdit, setToEdit] = useState({});
 
   class Todo {
     constructor(name, desc, key) {
@@ -17,13 +18,31 @@ const Home = (props) => {
     }
   }
 
-  function handleClick(e) {
+  function addTodo() {
     setKey(key + 1);
+    // console.log(key);
     const newTodo = new Todo(todoName, todoDesc, key);
-    console.log(newTodo);
+    // console.log(newTodo);
     setTodos((todos) => [...todos, newTodo]);
     setTodoName("");
     setTodoDesc("");
+  }
+  function editTodo(id) {
+    setEdit(true);
+    let target = todos.find((todo) => todo.key === id);
+    setToEdit(target.Todo);
+    console.log("id of the card of edit button clicked is", id);
+    console.log("TO EDIT", target);
+    setTodoName(toEdit.todo_name);
+    setTodoDesc(toEdit.todo_desc);
+  }
+  function updateTodo() {
+    console.log("toUpdate", toEdit);
+    // toEdit.todo_name = todoName;
+    // toEdit.todo_desc = todoDesc;
+    // setTodoName("");
+    // setTodoDesc("");
+    // setEdit(false);
   }
   return (
     <div className="container">
@@ -45,9 +64,15 @@ const Home = (props) => {
           placeholder="Todo Description"
         />
         <div className="col-lg-2 mt-1 me-1 todo_btn ">
-          <button onClick={handleClick} className="todo_btn w-100">
-            Add Todo
-          </button>
+          {edit === false ? (
+            <button onClick={(e) => addTodo()} className="todo_btn w-100">
+              Add Todo
+            </button>
+          ) : (
+            <button onClick={(e) => updateTodo()} className="todo_btn w-100">
+              Update Todo
+            </button>
+          )}
         </div>
       </div>
       <div className="row form-group">
@@ -61,7 +86,7 @@ const Home = (props) => {
             <select name="filter" id="filter" className="form-control">
               <option value="all">All</option>
               <option value="completed">Completed</option>
-              <option value="NotCompleted">Not Completed</option>
+              <option value="notCompleted">Not Completed</option>
             </select>
           </div>
         </div>
@@ -70,8 +95,8 @@ const Home = (props) => {
         <h2>My Todos</h2>
         {todos.map((todo) => {
           return (
-            <div className="col-lg-4">
-              <Card key={todo.key} todo={todo} />
+            <div className="col-lg-4" key={todo.key}>
+              <Card editTodo={editTodo} todo={todo} />
             </div>
           );
         })}
