@@ -20,30 +20,46 @@ const Home = (props) => {
 
   function addTodo() {
     setKey(key + 1);
-    // console.log(key);
     const newTodo = new Todo(todoName, todoDesc, key);
-    // console.log(newTodo);
     setTodos((todos) => [...todos, newTodo]);
     setTodoName("");
     setTodoDesc("");
   }
+
   function editTodo(id) {
     setEdit(true);
-    let target = todos.find((todo) => todo.key === id);
-    setToEdit(target.Todo);
-    console.log("id of the card of edit button clicked is", id);
-    console.log("TO EDIT", target);
-    setTodoName(toEdit.todo_name);
-    setTodoDesc(toEdit.todo_desc);
+    const target = todos.find((todo) => todo.key === id);
+    console.log(target);
+    if (target) {
+      setToEdit(target);
+      setTodoName(target.todo_name);
+      setTodoDesc(target.todo_desc);
+    }
   }
+
   function updateTodo() {
-    console.log("toUpdate", toEdit);
-    // toEdit.todo_name = todoName;
-    // toEdit.todo_desc = todoDesc;
-    // setTodoName("");
-    // setTodoDesc("");
-    // setEdit(false);
+    const updatedTodos = todos.map((todo) => {
+      if (todo.key === toEdit.key) {
+        // Update the properties of the todo being edited
+        return {
+          ...todo,
+          todo_name: todoName,
+          todo_desc: todoDesc,
+        };
+      }
+      return todo;
+    });
+
+    setTodos(updatedTodos);
+    setEdit(false);
+    setTodoName("");
+    setTodoDesc("");
   }
+
+  //   function updateTodo() {
+  //     toEdit.todo_name = todoName;
+  //     toEdit.todo_desc = todoDesc;
+  //   }
   return (
     <div className="container">
       <h2 className="text-center heading my-2">My todo</h2>
