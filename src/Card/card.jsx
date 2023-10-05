@@ -1,12 +1,13 @@
 import "./card.css";
-import { useState } from "react";
 const Card = (props) => {
-  let [edit, setEdit] = useState(false);
+  const { editTodo, deleteTodo, setEdit, todo } = props;
 
-  const { editTodo, todo } = props;
   function handleEdit(key) {
     setEdit(true);
     editTodo(key);
+  }
+  function handleDelete(key) {
+    deleteTodo(key);
   }
   return (
     <div>
@@ -35,7 +36,11 @@ const Card = (props) => {
             >
               Edit
             </button>
-            <button id="delete" className="m-2">
+            <button
+              id="delete"
+              className="m-2"
+              onClick={() => handleDelete(todo.key)}
+            >
               Delete
             </button>
           </div>

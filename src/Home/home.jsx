@@ -8,6 +8,7 @@ const Home = (props) => {
   let [key, setKey] = useState(1);
   let [edit, setEdit] = useState(false);
   let [toEdit, setToEdit] = useState({});
+  //   let [delet, setDelete] = useState(false);
 
   class Todo {
     constructor(name, desc, key) {
@@ -27,9 +28,7 @@ const Home = (props) => {
   }
 
   function editTodo(id) {
-    setEdit(true);
     const target = todos.find((todo) => todo.key === id);
-    console.log(target);
     if (target) {
       setToEdit(target);
       setTodoName(target.todo_name);
@@ -60,8 +59,15 @@ const Home = (props) => {
   //     toEdit.todo_name = todoName;
   //     toEdit.todo_desc = todoDesc;
   //   }
+
+  function deleteTodo(key) {
+    // let toDelete = todos.findIndex((todo) => todo.key === key);
+    // todos.splice(toDelete, 1);
+    let balanceTodos = todos.filter((todo) => todo.key !== key);
+    setTodos(balanceTodos);
+  }
   return (
-    <div className="container">
+    <div className="container p-2 border border-3">
       <h2 className="text-center heading my-2">My todo</h2>
 
       <div className="row mx-2 my-5">
@@ -112,7 +118,12 @@ const Home = (props) => {
         {todos.map((todo) => {
           return (
             <div className="col-lg-4" key={todo.key}>
-              <Card editTodo={editTodo} todo={todo} />
+              <Card
+                editTodo={editTodo}
+                deleteTodo={deleteTodo}
+                setEdit={setEdit}
+                todo={todo}
+              />
             </div>
           );
         })}
