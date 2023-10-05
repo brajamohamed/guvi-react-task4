@@ -8,8 +8,6 @@ const Home = (props) => {
   let [key, setKey] = useState(1);
   let [edit, setEdit] = useState(false);
   let [toEdit, setToEdit] = useState({});
-  //   let [delet, setDelete] = useState(false);
-
   class Todo {
     constructor(name, desc, key) {
       this.todo_name = name;
@@ -18,7 +16,11 @@ const Home = (props) => {
       this.key = key;
     }
   }
+  useEffect(() => {
+    console.log(todos);
+  }, [todos]);
 
+  // Add a new Todo
   function addTodo() {
     setKey(key + 1);
     const newTodo = new Todo(todoName, todoDesc, key);
@@ -26,7 +28,7 @@ const Home = (props) => {
     setTodoName("");
     setTodoDesc("");
   }
-
+  // Edit Todo
   function editTodo(id) {
     const target = todos.find((todo) => todo.key === id);
     if (target) {
@@ -35,11 +37,10 @@ const Home = (props) => {
       setTodoDesc(target.todo_desc);
     }
   }
-
+  // Update a existing Todo
   function updateTodo() {
     const updatedTodos = todos.map((todo) => {
       if (todo.key === toEdit.key) {
-        // Update the properties of the todo being edited
         return {
           ...todo,
           todo_name: todoName,
@@ -54,17 +55,23 @@ const Home = (props) => {
     setTodoName("");
     setTodoDesc("");
   }
-
-  //   function updateTodo() {
-  //     toEdit.todo_name = todoName;
-  //     toEdit.todo_desc = todoDesc;
-  //   }
-
+  // Delete a Todo
   function deleteTodo(key) {
-    // let toDelete = todos.findIndex((todo) => todo.key === key);
-    // todos.splice(toDelete, 1);
     let balanceTodos = todos.filter((todo) => todo.key !== key);
     setTodos(balanceTodos);
+  }
+  //   Set completed status
+  function setComplete(key) {
+    let updatedTods = todos.map((todo) => {
+      if (todo.key === key) {
+        return {
+          ...todo,
+          todo_status: "Completed",
+        };
+      }
+      return todo;
+    });
+    setTodos(updatedTods);
   }
   return (
     <div className="container p-2 border border-3">
@@ -121,6 +128,7 @@ const Home = (props) => {
               <Card
                 editTodo={editTodo}
                 deleteTodo={deleteTodo}
+                setComplete={setComplete}
                 setEdit={setEdit}
                 todo={todo}
               />

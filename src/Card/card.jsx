@@ -1,6 +1,8 @@
 import "./card.css";
+import { useState } from "react";
 const Card = (props) => {
-  const { editTodo, deleteTodo, setEdit, todo } = props;
+  const { editTodo, deleteTodo, setEdit, setComplete, todo } = props;
+  let [status, setStatus] = useState(false);
 
   function handleEdit(key) {
     setEdit(true);
@@ -8,6 +10,10 @@ const Card = (props) => {
   }
   function handleDelete(key) {
     deleteTodo(key);
+  }
+  function handleStatus(key) {
+    setStatus(true);
+    setComplete(key);
   }
   return (
     <div>
@@ -23,13 +29,21 @@ const Card = (props) => {
           </div>
           <div className="form-group m-2">
             <label htmlFor="status">Status</label>
-            <select className="ms-2" name="status" id="status">
+            <select
+              disabled={status}
+              className="ms-2"
+              name="status"
+              id="status"
+              //   value={selectedValue}
+              onChange={() => handleStatus(todo.key)}
+            >
               <option value="notCompleted">Not Completed</option>
               <option value="completed">Completed</option>
             </select>
           </div>
           <div className="d-flex justify-content-end me-5">
             <button
+              disabled={status}
               id="edit"
               className="m-2"
               onClick={() => handleEdit(todo.key)}
