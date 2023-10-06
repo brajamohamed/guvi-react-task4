@@ -4,10 +4,14 @@ import { useState, useEffect } from "react";
 const Home = (props) => {
   let [todoName, setTodoName] = useState("");
   let [todoDesc, setTodoDesc] = useState("");
+  let [add, setAdd] = useState(false);
   let [todos, setTodos] = useState([]);
   let [key, setKey] = useState(1);
   let [edit, setEdit] = useState(false);
   let [toEdit, setToEdit] = useState({});
+  let [complete, setComplete] = useState();
+  let [filterValue, setFilterValue] = useState("All");
+  let [filteredTodo, setFilteredTodo] = useState([]);
   class Todo {
     constructor(name, desc, key) {
       this.todo_name = name;
@@ -27,6 +31,8 @@ const Home = (props) => {
     setTodos((todos) => [...todos, newTodo]);
     setTodoName("");
     setTodoDesc("");
+    setAdd(true);
+    setAdd(false);
   }
   // Edit Todo
   function editTodo(id) {
@@ -61,18 +67,36 @@ const Home = (props) => {
     setTodos(balanceTodos);
   }
   //   Set completed status
-  function setComplete(key) {
-    let updatedTods = todos.map((todo) => {
-      if (todo.key === key) {
-        return {
-          ...todo,
-          todo_status: "Completed",
-        };
+  useEffect(
+    (key) => {
+      setComplete("Completed");
+      let updatedTods = todos.map((todo) => {
+        if (todo.key === key) {
+          return {
+            ...todo,
+            todo_status: "Completed",
+          };
+        }
+        return todo;
+      });
+      setTodos(updatedTods);
+    },
+    [complete]
+  );
+
+  //   Filter Todos
+  useEffect(() => {
+    let filteredTodos = todos.filter((todo) => {
+      if (filterValue == "All") {
+        return true;
+      } else {
+        return todo.todo_status === filterValue;
       }
-      return todo;
     });
-    setTodos(updatedTods);
-  }
+    console.log(filteredTodos);
+    setFilteredTodo(filteredTodos);
+  }, [filterValue, add]);
+
   return (
     <div className="container p-2 border border-3">
       <h2 className="text-center heading my-2">My todo</h2>
@@ -112,17 +136,22 @@ const Home = (props) => {
             </label>
           </div>
           <div className="col-lg-2">
-            <select name="filter" id="filter" className="form-control">
-              <option value="all">All</option>
-              <option value="completed">Completed</option>
-              <option value="notCompleted">Not Completed</option>
+            <select
+              name="filter"
+              id="filter"
+              className="form-control"
+              onChange={(e) => setFilterValue(e.target.value)}
+            >
+              <option value="All">All</option>
+              <option value="Completed">Completed</option>
+              <option value="Not Completed">Not Completed</option>
             </select>
           </div>
         </div>
       </div>
       <div className="row mt-5">
         <h2>My Todos</h2>
-        {todos.map((todo) => {
+        {filteredTodo.map((todo) => {
           return (
             <div className="col-lg-4" key={todo.key}>
               <Card
