@@ -31,7 +31,7 @@ const Card = (props) => {
           <div className="form-group m-2">
             <label htmlFor="status">Status</label>
             <select
-              disabled={this.status}
+              disabled={status}
               className="ms-2"
               name="status"
               id="status"
