@@ -4,14 +4,15 @@ import { useState, useEffect } from "react";
 const Home = (props) => {
   let [todoName, setTodoName] = useState("");
   let [todoDesc, setTodoDesc] = useState("");
-  let [add, setAdd] = useState(false);
+  // let [add, setAdd] = useState(false);
   let [todos, setTodos] = useState([]);
   let [key, setKey] = useState(1);
   let [edit, setEdit] = useState(false);
   let [toEdit, setToEdit] = useState({});
-  let [complete, setComplete] = useState();
   let [filterValue, setFilterValue] = useState("All");
   let [filteredTodo, setFilteredTodo] = useState([]);
+  let [triggerRender, setRender] = useState(false);
+
   class Todo {
     constructor(name, desc, key) {
       this.todo_name = name;
@@ -20,9 +21,9 @@ const Home = (props) => {
       this.key = key;
     }
   }
-  useEffect(() => {
-    console.log(todos);
-  }, [todos]);
+  // useEffect(() => {
+  //   console.log(todos);
+  // }, [todos]);
 
   // Add a new Todo
   function addTodo() {
@@ -31,8 +32,7 @@ const Home = (props) => {
     setTodos((todos) => [...todos, newTodo]);
     setTodoName("");
     setTodoDesc("");
-    setAdd(true);
-    setAdd(false);
+    setRender(true);
   }
   // Edit Todo
   function editTodo(id) {
@@ -60,42 +60,46 @@ const Home = (props) => {
     setEdit(false);
     setTodoName("");
     setTodoDesc("");
+    setRender(true);
   }
   // Delete a Todo
   function deleteTodo(key) {
     let balanceTodos = todos.filter((todo) => todo.key !== key);
     setTodos(balanceTodos);
+    setRender(true);
   }
   //   Set completed status
-  useEffect(
-    (key) => {
-      setComplete("Completed");
-      let updatedTods = todos.map((todo) => {
-        if (todo.key === key) {
-          return {
-            ...todo,
-            todo_status: "Completed",
-          };
-        }
-        return todo;
-      });
-      setTodos(updatedTods);
-    },
-    [complete]
-  );
 
-  //   Filter Todos
+  let setTodoStatus = (key) => {
+    let updatedTods = todos.map((todo) => {
+      if (todo.key === key) {
+        return {
+          ...todo,
+          todo_status: "Completed",
+        };
+      }
+      return todo;
+    });
+    setTodos(updatedTods);
+    setRender(true);
+  };
+
+  //   Render/Filter Todos
   useEffect(() => {
     let filteredTodos = todos.filter((todo) => {
       if (filterValue == "All") {
+        console.log("All Seleted Filter:", filterValue);
         return true;
       } else {
+        console.log("Else Seleted Filter:", filterValue);
         return todo.todo_status === filterValue;
       }
     });
-    console.log(filteredTodos);
+    console.log("Todos:", todos);
+    console.log("Rendered:", filteredTodos);
     setFilteredTodo(filteredTodos);
-  }, [filterValue, add]);
+    setRender(false);
+  }, [triggerRender]);
 
   return (
     <div className="container p-2 border border-3">
@@ -140,6 +144,7 @@ const Home = (props) => {
               name="filter"
               id="filter"
               className="form-control"
+              value={filterValue}
               onChange={(e) => setFilterValue(e.target.value)}
             >
               <option value="All">All</option>
@@ -156,9 +161,9 @@ const Home = (props) => {
             <div className="col-lg-4" key={todo.key}>
               <Card
                 editTodo={editTodo}
-                deleteTodo={deleteTodo}
-                setComplete={setComplete}
                 setEdit={setEdit}
+                deleteTodo={deleteTodo}
+                setTodoStatus={setTodoStatus}
                 todo={todo}
               />
             </div>

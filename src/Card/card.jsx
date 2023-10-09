@@ -1,7 +1,7 @@
 import "./card.css";
 import { useState } from "react";
 const Card = (props) => {
-  const { editTodo, deleteTodo, setEdit, setComplete, todo } = props;
+  const { editTodo, deleteTodo, setEdit, setTodoStatus, todo } = props;
   let [status, setStatus] = useState(false);
 
   function handleEdit(key) {
@@ -13,7 +13,8 @@ const Card = (props) => {
   }
   function handleStatus(key) {
     setStatus(true);
-    setComplete(key);
+    console.log("status changed.. Key is:", key);
+    setTodoStatus(key);
   }
   return (
     <div>
@@ -30,15 +31,15 @@ const Card = (props) => {
           <div className="form-group m-2">
             <label htmlFor="status">Status</label>
             <select
-              disabled={status}
+              disabled={this.status}
               className="ms-2"
               name="status"
               id="status"
-              //   value={selectedValue}
+              // value={selectedValue}
               onChange={() => handleStatus(todo.key)}
             >
-              <option value="notCompleted">Not Completed</option>
-              <option value="completed">Completed</option>
+              <option value="Not Completed">Not Completed</option>
+              <option value="Completed">Completed</option>
             </select>
           </div>
           <div className="d-flex justify-content-end me-5">
