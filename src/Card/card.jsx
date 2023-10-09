@@ -1,8 +1,7 @@
 import "./card.css";
 import { useState } from "react";
 const Card = (props) => {
-  const { editTodo, deleteTodo, setEdit, setTodoStatus, todo } = props;
-  let [status, setStatus] = useState(false);
+  const { editTodo, deleteTodo, setEdit, setTodoStatus, status, todo } = props;
 
   function handleEdit(key) {
     setEdit(true);
@@ -12,10 +11,10 @@ const Card = (props) => {
     deleteTodo(key);
   }
   function handleStatus(key) {
-    setStatus(true);
     console.log("status changed.. Key is:", key);
     setTodoStatus(key);
   }
+
   return (
     <div>
       <div className="card mt-5 m-2">
@@ -35,7 +34,7 @@ const Card = (props) => {
               className="ms-2"
               name="status"
               id="status"
-              // value={selectedValue}
+              // value={status}
               onChange={() => handleStatus(todo.key)}
             >
               <option value="Not Completed">Not Completed</option>

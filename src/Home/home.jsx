@@ -9,6 +9,7 @@ const Home = (props) => {
   let [key, setKey] = useState(1);
   let [edit, setEdit] = useState(false);
   let [toEdit, setToEdit] = useState({});
+  let [status, setStatus] = useState(false);
   let [filterValue, setFilterValue] = useState("All");
   let [filteredTodo, setFilteredTodo] = useState([]);
   let [triggerRender, setRender] = useState(false);
@@ -82,6 +83,7 @@ const Home = (props) => {
     });
     setTodos(updatedTods);
     setRender(true);
+    setStatus(true);
   };
 
   //   Render/Filter Todos
@@ -99,7 +101,7 @@ const Home = (props) => {
     console.log("Rendered:", filteredTodos);
     setFilteredTodo(filteredTodos);
     setRender(false);
-  }, [triggerRender]);
+  }, [filterValue, triggerRender]);
 
   return (
     <div className="container p-2 border border-3">
@@ -164,6 +166,7 @@ const Home = (props) => {
                 setEdit={setEdit}
                 deleteTodo={deleteTodo}
                 setTodoStatus={setTodoStatus}
+                status={status}
                 todo={todo}
               />
             </div>
